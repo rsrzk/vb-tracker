@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 
 # Session state to store entries
 if "entries" not in st.session_state:
@@ -7,14 +8,43 @@ if "entries" not in st.session_state:
 
 st.title("🏐 Volleyball Match Logger")
 
-# Video upload
-video_path = st.sidebar.text_input("Enter path to local video file", value="videos/match1.mp4")
+# --- Video selection section ---
 
+st.sidebar.header("🎞️ Select or enter a video")
+video_dir = "videos"
+available_videos = []
+
+# List video files from folder if it exists
+if os.path.exists(video_dir):
+	available_videos = [
+		f for f in os.listdir(video_dir)
+		if f.lower().endswith(('.mp4', '.mov', '.avi'))
+	]
+
+# Dropdown selection
+selected_video = st.sidebar.selectbox("Choose from /videos folder:", ["-- Select --"] + available_videos)
+
+# Manual path input
+custom_video_path = st.sidebar.text_input("Or enter a full video path manually:")
+
+# Determine final video path
+video_path = None
+if custom_video_path.strip() != "":
+    video_path = custom_video_path
+elif selected_video != "-- Select --":
+    video_path = os.path.join(video_dir, selected_video)
+
+# --- File validation ---
 if video_path:
-	try:
-		st.video(video_path)
-	except Exception as e:
-		st.error(f"Could not load video: {e}")
+    if not os.path.exists(video_path):
+        st.error(f"⚠️ File not found: `{video_path}`")
+    else:
+        try:
+            st.video(video_path)
+        except Exception as e:
+            st.error(f"❌ Could not load video: {e}")
+else:
+    st.info("No video selected yet.")
 
 # Form input
 with st.form("log_form"):
