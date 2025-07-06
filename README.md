@@ -10,7 +10,7 @@ MVP 1 Goals:
 Steps:
 1. Create repo on Gitub then clone using SSH
 2. Create venv with `python3 -m venv .venv`
-3. Activate venv with .venv/bin/activate
+3. Activate venv with `source .venv/bin/activate`
 4. Install dependencies with `pip install streamlit pandas`
 5. Generate requirements.txt with `pip freeze > requirements.txt`
 6. Create .gitignore file

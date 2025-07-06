@@ -8,9 +8,13 @@ if "entries" not in st.session_state:
 st.title("🏐 Volleyball Match Logger")
 
 # Video upload
-video = st.sidebar.file_uploader("Upload Match Video", type=["mp4", "mov"])
-if video:
-    st.video(video)
+video_path = st.sidebar.text_input("Enter path to local video file", value="videos/match1.mp4")
+
+if video_path:
+	try:
+		st.video(video_path)
+	except Exception as e:
+		st.error(f"Could not load video: {e}")
 
 # Form input
 with st.form("log_form"):
